@@ -1,22 +1,31 @@
+import { useReducer, useRef } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Title from './components/title/Title';
+import ActualizaInputData from './reducers/actualizaInputData'
 
 function App() {
+
+  const texto = useRef();
+
+  const [state, dispatch] = useReducer(ActualizaInputData, "");
+
+  const handlerData = () => {
+    if (texto.current !== undefined) {
+      dispatch({ type: "actualiza", newTitle: texto.current.value })
+      texto.current.value = "";
+    }
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <Title title={state} />
+        <div>
+          <textarea ref={texto} rows={10} />
+          <button onClick={handlerData}>Generar</button>
+        </div>
       </header>
     </div>
   );
