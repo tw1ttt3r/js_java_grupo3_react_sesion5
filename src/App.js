@@ -1,19 +1,17 @@
-import { useReducer, useRef } from 'react';
+import { useContext, useReducer, useRef } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Title from './components/title/Title';
-import ActualizaInputData from './reducers/actualizaInputData'
+import GlobalContext from './contexts/globals';
 
 function App() {
 
   const texto = useRef();
-
-  const [state, dispatch] = useReducer(ActualizaInputData, "");
+  const { valida } = useContext(GlobalContext);
 
   const handlerData = () => {
-    if (texto.current !== undefined) {
-      dispatch({ type: "actualiza", newTitle: texto.current.value })
-      texto.current.value = "";
+    if (!!texto.current) {
+      valida(texto);
     }
   }
 
@@ -21,7 +19,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <Title title={state} />
+        <Title />
         <div>
           <textarea ref={texto} rows={10} />
           <button onClick={handlerData}>Generar</button>
